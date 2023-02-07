@@ -23,6 +23,7 @@ soup = BeautifulSoup(response.text, 'lxml')
 # Получаем список URL
 links = [i.next['href'] for i in soup.find_all('div', class_="catalog_item_name")]
 
+links = ['/catalog/goods/Nitki-shveynie-Cotton--503-Aurora/1099/']
 file = open(file_name, 'a', encoding='utf-8', newline='')
 for link in links:
     link = f'https://aurora.ru{link}'
@@ -31,7 +32,7 @@ for link in links:
     soup = BeautifulSoup(response.text, 'lxml')
 
     name = soup.find('h1', class_="goods_h1_name").text.strip()
-    article = soup.find('div', class_="goods_artikul").text.split(':')[1].strip() if soup.find('div', class_="goods_artikul") and len(soup.find('div', class_="goods_artikul").text.split(':')) > 1 else f'Нет артикула {name}'
+    article = soup.find('div', class_="goods_artikul").text.split(':')[1].strip() if soup.find('div', class_="goods_artikul") and len(soup.find('div', class_="goods_artikul").text.split(':')) > 1 else f'Нет артикула {name}'.replace('/', '-')
     price = soup.find('span', class_="price").text.split()[0].strip() if soup.find('span', class_="price") else 'Нет цены'
     description = soup.find('div', id="description").text.strip()
     characteristics_names = [i.text for i in soup.find_all('span', class_="param_name")]
